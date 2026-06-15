@@ -115,7 +115,7 @@ namespace andrivet::advobfuscator {
     /// a transition. If it is not the case, there is a bug in the generation of the FSM.
     /// In this case, an exception is raised.
     [[nodiscard]] constexpr const details::Transition<O> &find(int state, bool input) const {
-      for(int i = 0; i < nb_transition_; ++i) {
+      for(size_t i = 0; i < nb_transition_; ++i) {
         if(transitions_[i].from == state && transitions_[i].input == input)
           return transitions_[i];
       }

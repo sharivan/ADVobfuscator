@@ -120,11 +120,28 @@ namespace andrivet::advobfuscator {
   /// \tparam N The number of characters.
   /// \param str The string of characters.
   /// \param initial The initial value of the sum (0 by default).
-  template<unsigned N>
-  consteval std::size_t generate_sum(char const (&str)[N], size_t initial = 0) {
+  template<typename CharT, std::size_t N>
+  consteval std::size_t generate_sum(CharT const (&str)[N], std::size_t initial = 0) {
     std::size_t sum = initial;
-    for(std::size_t i = 0; i < N; ++i) sum = (sum + str[i]) % 1000;
+
+    for(std::size_t i = 0; i < N; ++i)
+        sum = (sum + str[i]) % 1000;
+
     return sum;
+  }
+
+  /// Compute the sum of a initial number of of the values of characters.
+  /// \tparam N The number of characters.
+  /// \param str The string of characters.
+  /// \param initial The initial value of the sum (0 by default).
+  template<typename CharT, unsigned N>
+  consteval std::size_t generate_sum(std::array<CharT, N> arr, std::size_t initial = 0) {
+      std::size_t sum = initial;
+
+      for (std::size_t i = 0; i < N; ++i)
+          sum = (sum + arr[i]) % 1000;
+
+      return sum;
   }
 
 }
