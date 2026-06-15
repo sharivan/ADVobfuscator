@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(advobfuscator VERSION 2.0.0 LANGUAGES CXX)
+project(advobfuscator VERSION 2.1.0 LANGUAGES CXX)
 
 option(BUILD_TESTING "Build unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
@@ -20,24 +20,25 @@ install(TARGETS advobfuscator EXPORT advobfuscatorTargets)
 install(EXPORT advobfuscatorTargets
         FILE advobfuscatorTargets.cmake
         NAMESPACE advobfuscator::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/advobfuscator
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/advobfuscator
 )
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/mylibConfigVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/advobfuscatorConfigVersion.cmake"
         VERSION ${PROJECT_VERSION}
         COMPATIBILITY SameMajorVersion
+        ARCH_INDEPENDENT
 )
 configure_package_config_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake/AdvobfuscatorConfig.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/advobfuscatorConfig.cmake"
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/advobfuscator
+        INSTALL_DESTINATION ${CMAKE_INSTALL_DATADIR}/advobfuscator
 )
 install(FILES
         "${CMAKE_CURRENT_BINARY_DIR}/advobfuscatorConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/advobfuscatorConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/advobfuscator
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/advobfuscator
 )
 
 if(BUILD_TESTING)
@@ -46,5 +47,5 @@ if(BUILD_TESTING)
 endif()
 
 if(BUILD_EXAMPLES)
-    add_subdirectory(examples)
+    add_subdirectory(Examples)
 endif()

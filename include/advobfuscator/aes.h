@@ -42,7 +42,7 @@
 #include "bytes.h"
 
 namespace andrivet::advobfuscator {
-  /// Length of the cypher key
+  /// Length of the cipher key
   static constexpr std::size_t n_key{128}; // 128-bit or 192-bit or 256-bit
 
   // I prefer to use std::uin8_t instead of std::byte for the implicit conversions (from int)
@@ -268,7 +268,7 @@ namespace andrivet::advobfuscator {
 
     /// AddRoundKey Transformation - Add a Round Key to the State.
     /// \param state The current state.
-    /// \param round_key The round key.
+    /// \param ekey The round key.
     /// \return The transformed state.
     /// \remark Section 5.1.4
     [[nodiscard]] constexpr State add_round_key(const State &state, const EKey &ekey, std::size_t round) {
@@ -288,7 +288,7 @@ namespace andrivet::advobfuscator {
 
     /// Addition (XOR) in GF(2^8) of two words.
     /// \param w0 The left operand.
-    /// \param w1 The wight operand.
+    /// \param w1 The right operand.
     /// \return The result of the addition in GF(2^8) of each byte.
     [[nodiscard]] constexpr Word operator^(const Word &w0, const Word &w1) {
       return Word{
@@ -301,7 +301,7 @@ namespace andrivet::advobfuscator {
 
     /// Addition (XOR) in GF(2^8) of a word and a byte.
     /// \param w0 The left operand.
-    /// \param w1 The wight operand.
+    /// \param b The right operand.
     /// \return The result of the addition in in GF(2^8) of each byte of the left operand with the right operand.
     [[nodiscard]] constexpr Word operator^(const Word &w0, Byte b) {
       return Word{
@@ -349,7 +349,7 @@ namespace andrivet::advobfuscator {
     }
 
     /// Create a Block from a State.
-    /// \param block The State used to create the Block.
+    /// \param state The State used to create the Block.
     /// \return The Block created from the State.
     [[nodiscard]] constexpr Block to_block(const State &state) {
       Block block;
@@ -390,7 +390,7 @@ namespace andrivet::advobfuscator {
   /// \param block bytes to be decrypted with AES.
   /// \param key AES key.
   /// \return The decrypted block.
-  [[nodiscard]] Block decrypt(const Block &block, const Key &key) {
+  [[nodiscard]] inline Block decrypt(const Block &block, const Key &key) {
     using namespace details;
     const auto ekey = key_expansion(key);
 
@@ -431,10 +431,10 @@ namespace andrivet::advobfuscator {
   }
 
   /// Decrypt in-place a string with a key using CTR (Counter) code (using a nonce)
-  /// \param block bytes to be decrypted with AES. The number of bytes does not need to be a multiple of 128.
+  /// \param data bytes to be decrypted with AES. The number of bytes does not need to be a multiple of 128.
   /// \param key AES key.
   /// \param nonce The random nonce to initialize the stream.
-  void decrypt_ctr(Byte *data, size_t size, const Key &key, const Nonce &nonce) {
+  inline void decrypt_ctr(Byte *data, size_t size, const Key &key, const Nonce &nonce) {
     Block ctr{
         nonce[0], nonce[1], nonce[2], nonce[3], nonce[4], nonce[5], nonce[6], nonce[7],
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -456,7 +456,7 @@ namespace andrivet::advobfuscator {
   }
 
   /// Decrypt out-of-place a string with a key using CTR (Counter) code (using a nonce)
-  /// \param block bytes to be decrypted with AES. The number of bytes does not need to be a multiple of 128.
+  /// \param data bytes to be decrypted with AES. The number of bytes does not need to be a multiple of 128.
   /// \param key AES key.
   /// \param nonce The random nonce to initialize the stream.
   /// \return The decrypted bytes

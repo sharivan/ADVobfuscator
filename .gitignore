@@ -74,5 +74,7 @@ ipch/
 *.sdf
 *.cachefile
 
+cmake-build-*/
+
 *.o
 Sample

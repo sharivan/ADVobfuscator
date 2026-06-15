@@ -1,19 +1,18 @@
 What is ADVobfuscator?
 ======================
 
-**ADVobfuscator** demonstrates how to use the `C++20` language to generate, at compile time, obfuscated data and code without using any external tool and without modifying the compiler. 
-The techniques presented rely only on `C++20`, as standardized by ISO. 
-It also shows how to introduce some form of randomness to generate polymorphic code, and it gives some concrete examples like the encryption of string literals and the obfuscation of calls using finite state machines.
+![](docs/images/Logo-128x128.png)
 
-**ADVobfuscator** is delivered as a set of header files. You have to include them in your project and call the appropriate functions.
+**ADVobfuscator** is a library that uses the `C++20` language to generate, at compile time, obfuscated data and code without using any external tool and without modifying the compiler.
+Strings or blocks of data can be obfuscated or encrypted at compile time, and they are decoded at runtime:
 
 
 How to use it?
 ==============
 
-First, you have to follow the requirements below. Then, you just have to include **ADVobfuscator** header files and use UDL such as `_obf` or `_aes` to protect your strings.
+The [documentation](https://andrivet.github.io/ADVobfuscator/ADVobfuscator.pdf) explains how the library is built, how to install and use it.
 
-Look at the examples in the `examples` folder.
+Look also at the examples in the `Examples` folder.
 
 Requirements
 ------------
@@ -28,43 +27,59 @@ Examples
 ### Linux and macOS (CMake)
 
 ```
-cd Examples
 mkdir -p BUILD
 cd BUILD
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 ```
 
-Each example is in its subdirectory.
+Each example is in its subdirectory. For example `./example/demo`.
 
-### Windows (Visual Studio 22)
+### Clang in Docker
+
+```
+docker build -t advobfuscator-clang -f docker/clang.docker .
+docker run --rm -it advobfuscator-clang:latest
+```
+
+### GCC in Docker
+
+```
+docker build -t advobfuscator-gcc -f docker/gcc.docker .
+docker run --rm -it advobfuscator-gcc:latest
+```
+
+### Windows (Visual Studio)
 
 Open `ADVobfuscator.sln`.
-
 
 Debug Builds
 -------------
 
 Debug builds are very special: Compiler do not have (and do not most of the time) respect statements such as `inline` or `constexpr`. All optimizations are also, by default, disabled. Compilers are doing this for a good reason: let you debug, single step, etc.
 
-As a consequence, **ADVobfuscator** is **not** compatible with Debug builds. It works only for Release builds.
+As a consequence, **ADVobfuscator** is **not** compatible with Debug builds.
+You can compile in Debug but in this case, the strings or data will not be obfuscated.
+Obfuscation works only for Release builds.
 
 Compatibility
 =============
 
 **ADVobfuscator** has been tested with:
 
-Compiler        | Version  | OS          | CPU     | Compatible |
-----------------|----------|-------------|---------|------------|
-Apple Clang     | 17.0.0   | macOS 15    | AArch64 | YES        |
-Clang           | 19.1.7   | Debian 13   | x86_64  | YES        |
-Clang           | 18.1.8   | Debian 13   | x86_64  | YES        |
-Clang           | 17.0.6   | Debian 13   | x86_64  | YES        |
-GCC             | 15.1.0   | macOS 15    | x86_64  | YES        |
-GCC             | 14.2.0   | macOS 15    | AArch64 | YES        |
-GCC             | 14.2.0   | Debian 13   | x86_64  | YES        |
-GCC             | 13.3.0   | macOS 15    | AArch64 | NO         |
-Visual Studio   | 17.14.13 | Windows 11  | AArch64 | YES        |
+Compiler            | Version  | OS         | CPU     | Obfuscation | AES     |
+--------------------|----------|------------|---------|-------------|---------|
+Apple Clang         | 17.0.0   | macOS 15   | AArch64 | YES         | limited |
+Clang               | 21.1.8   | Debian 14  | x86_64  | YES         | limited |
+Clang               | 19.1.7   | Debian 13  | x86_64  | YES         | limited |
+Clang               | 18.1.8   | Debian 13  | x86_64  | YES         | limited |
+Clang               | 17.0.6   | Debian 13  | x86_64  | YES         | limited |
+GCC                 | 15.1.0   | macOS 15   | x86_64  | YES         | YES     |
+GCC                 | 14.2.0   | macOS 15   | AArch64 | YES         | YES     |
+GCC                 | 14.2.0   | Debian 13  | x86_64  | YES         | YES     |
+GCC                 | 13.3.0   | macOS 15   | AArch64 | NO          | NO      |
+Visual Studio 2022  | 17.14.13 | Windows 11 | AArch64 | YES         | limited |
+Visual Studio 2026  | 18.0.339 | Windows 11 | AArch64 | YES         | limited |
 
 Other compilers are probably compatible if they are `C++20` compliant.
 

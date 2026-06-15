@@ -67,7 +67,7 @@ namespace andrivet::advobfuscator {
         return;
       }
       else
-        return std::invoke(fn, args...);
+        return std::invoke(fn, o, args...);
     }
 
     Fsm<F> fsm_;

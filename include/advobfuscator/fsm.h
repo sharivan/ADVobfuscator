@@ -34,9 +34,9 @@
 
 namespace andrivet::advobfuscator {
 
-  constexpr size_t NB_BITS = 32; //< Number of bits recognized.
-  constexpr size_t TRANSITIONS_PER_BIT = 8; //< Number of transitions per bit.
-  constexpr size_t MAX_TRANSITIONS = NB_BITS * TRANSITIONS_PER_BIT; //< Total number of transitions.
+  constexpr size_t NB_BITS = 32; ///< Number of bits recognized.
+  constexpr size_t TRANSITIONS_PER_BIT = 8; ///< Number of transitions per bit.
+  constexpr size_t MAX_TRANSITIONS = NB_BITS * TRANSITIONS_PER_BIT; ///< Total number of transitions.
 
   // For each bit to recognize, we create a small FSM of 4 states and 8 transitions.
   // - The first transition moves the recognizer to the next state.
@@ -68,17 +68,17 @@ namespace andrivet::advobfuscator {
     };
   }
 
-  /// A finite state machine that recognize a number bit per bit,
+  /// A finite state machine that recognizes a number bit per bit,
   template<typename O>
   struct Fsm {
-    /// Construct a new finite state machine that recognize a number and store an object.
+    /// Construct a new finite state machine that recognizes a number and stores an object.
     /// \param recognize The number to be recognized by this finite state machine.
     /// \param o The object stored in one of the transition (the active one).
     consteval Fsm(std::uint32_t recognize, O o) {
       // Get a random number for the activate transition of the recognizer.
       // The activate transition is the transition that stores the object.
-      const std::uint32_t activate = generate_random_not_0<uint32_t>(recognize % 1000, NB_BITS - 1);
-      auto bits = details::num_bits(recognize);
+      const auto bits = details::num_bits(recognize);
+      const std::uint32_t activate = generate_random_not_0<uint32_t>(recognize % 1000, static_cast<std::uint32_t>(bits) + 1u);
 
       // For each bit...
       for(int i = 0; i < bits; ++i) {

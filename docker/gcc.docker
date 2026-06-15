@@ -1,0 +1,27 @@
+FROM ubuntu:24.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    wget \
+    gnupg \
+    lsb-release \
+    build-essential \
+    gcc-14 \
+    g++-14 \
+    cmake \
+    ninja-build \
+    git \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /project
+COPY . /project
+
+RUN cmake -S . -B build -G Ninja \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_C_COMPILER=gcc-14 \
+      -DCMAKE_CXX_COMPILER=g++-14 \
+ && cmake --build build --parallel
+
+CMD ["ctest", "--test-dir", "build", "--output-on-failure"]

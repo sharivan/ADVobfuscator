@@ -39,7 +39,7 @@ namespace andrivet::advobfuscator {
   template<std::size_t N>
   struct AesString {
     /// Construct a compile-time string encrypted with AES-CTR.
-    /// \lparam str Array of characters to be encrypted at compile-time.
+    /// \param str Array of characters to be encrypted at compile-time.
     /// \remark A key and a nonce are generated on the fly.
     consteval AesString(const char (&str)[N]) noexcept
     : key_{generate_random_block<16>(generate_sum(str, 0))},
@@ -64,11 +64,11 @@ namespace andrivet::advobfuscator {
       return reinterpret_cast<const char *>(data_.data());
     }
 
-    /// Descrypt the encrypted string.
+    /// Decrypt the encrypted string.
     [[nodiscard]] constexpr std::string decrypt() const {
       std::array<std::uint8_t, N> buffer;
       std::copy(data_.begin(), data_.end(), buffer.begin());
-      if(encrypted_) decrypt_ctr(buffer.begin(), N, key_, nonce_);
+      if(encrypted_) decrypt_ctr(buffer.data(), N, key_, nonce_);
       std::string str;
       str.resize(N - 1);
       std::copy(buffer.begin(), buffer.end() - 1, str.begin());
