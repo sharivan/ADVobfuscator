@@ -56,8 +56,8 @@ inline void describe(andrivet::advobfuscator::DataAlgorithm algo) {
   }
 }
 
-template<std::size_t N>
-void describe(const andrivet::advobfuscator::ObfuscatedString<N> &str, bool raw = true) {
+template<typename CharT, std::size_t N>
+void describe(const andrivet::advobfuscator::ObfuscatedString<CharT, N> &str, bool raw = true) {
   using namespace andrivet::advobfuscator;
   std::cout << "Obfuscated: " << (str.obfuscated_ ? "Yes" : "No") << '\n';
   std::cout << "Algorithms: ";

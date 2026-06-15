@@ -33,13 +33,13 @@
 #include "aes_string.h"
 
 /// Formatter for Obfuscated strings
-template<std::size_t N>
-struct std::formatter<andrivet::advobfuscator::ObfuscatedString<N>> {
+template<typename CharT, std::size_t N>
+struct std::formatter<andrivet::advobfuscator::ObfuscatedString<CharT, N>> {
   constexpr auto parse(std::format_parse_context& ctx) {
     return ctx.begin();
   }
 
-  auto format(const andrivet::advobfuscator::ObfuscatedString<N> &s, std::format_context& ctx) const {
+  auto format(const andrivet::advobfuscator::ObfuscatedString<CharT, N> &s, std::format_context& ctx) const {
     return std::format_to(ctx.out(), "{}", s.decode());
   }
 };
